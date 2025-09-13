@@ -25,6 +25,6 @@ public class UrlWriteController {
 
         String shortUrl = "http://localhost:8080/" + url.getShortCode();
 
-        return new UrlResponse(shortUrl);
+        return new UrlResponse(url.getId(), shortUrl, url.getOriginalUrl(), url.getCreatedAt());
     }
 }

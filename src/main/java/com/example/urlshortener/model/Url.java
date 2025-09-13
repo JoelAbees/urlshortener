@@ -65,4 +65,8 @@ public class Url {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    public long getId() {
+        return id;
+    }
 }
