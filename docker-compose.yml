@@ -48,5 +48,16 @@ services:
       SPRING_DATASOURCE_USERNAME: appuser
       SPRING_DATASOURCE_PASSWORD: supersecret
 
+  api-gateway:
+    build: ./api-gateway
+    container_name: urlshortner-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - write-service
+      - read-service
+      - redirect-service
+
 volumes:
   pgdata:
+
