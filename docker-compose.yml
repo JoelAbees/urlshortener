@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  db:
+  postgres:
     image: postgres:latest
     container_name: urlshortner-postgres
     environment:
@@ -11,16 +11,40 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-  
-  app:
-    build: .
-    container_name: urlshortner-app
+
+  write-service:
+    build: ./write-service
+    container_name: urlshortner-write
     ports:
-      - "8080:8080"
+      - "8081:8081"
     depends_on:
-      - db
+      - postgres
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/urlshortner
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/urlshortner
+      SPRING_DATASOURCE_USERNAME: appuser
+      SPRING_DATASOURCE_PASSWORD: supersecret
+
+  read-service:
+    build: ./read-service
+    container_name: urlshortner-read
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/urlshortner
+      SPRING_DATASOURCE_USERNAME: appuser
+      SPRING_DATASOURCE_PASSWORD: supersecret
+
+  redirect-service:
+    build: ./redirect-service
+    container_name: urlshortner-redirect
+    ports:
+      - "8083:8083"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/urlshortner
       SPRING_DATASOURCE_USERNAME: appuser
       SPRING_DATASOURCE_PASSWORD: supersecret
 
