@@ -2,18 +2,69 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>URL Shortener</title>
+    <!-- Bootswatch Sketchy theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/sketchy/bootstrap.min.css">
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #fff;
+        }
+        .card {
+            max-width: 600px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        input, button {
+            font-size: 1.2rem;
+            padding: 0.75rem;
+        }
+        .card-body {
+            color: #000;
+        }
+    </style>
 </head>
 <body>
+<div class="container text-center">
     <h1>Welcome to URL Shortener</h1>
-    <form action="/shorten" method="post">
-        <input type="text" name="longUrl" placeholder="Enter your long URL" required />
-        <button type="submit">Shorten</button>
+
+    <!-- Form -->
+    <form action="/shorten" method="post" class="d-flex justify-content-center mb-4">
+        <input type="text" name="longUrl" class="form-control w-50 me-2" placeholder="Enter your long URL" required>
+        <button type="submit" class="btn btn-warning">Shorten</button>
     </form>
 
-    <div th:if="${shortUrl}">
-        <h2>Result:</h2>
-        <p>Original: <span th:text="${longUrl}"></span></p>
-        <p>Shortened: <a th:href="${shortUrl}" th:text="${shortUrl}"></a></p>
+    <!-- Result -->
+    <div th:if="${shortUrl}" class="card mx-auto shadow-lg">
+        <div class="card-body">
+            <h4 class="card-title">Result:</h4>
+            <p class="card-text">Original: <span th:text="${longUrl}"></span></p>
+            
+            <div class="input-group">
+                <input type="text" id="shortUrlInput" class="form-control" th:value="${shortUrl}" readonly>
+                <button class="btn btn-success" type="button" onclick="copyToClipboard()">Copy</button>
+            </div>
+        </div>
     </div>
+</div>
+
+<script>
+    function copyToClipboard() {
+        var copyText = document.getElementById("shortUrlInput");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // for mobile
+        navigator.clipboard.writeText(copyText.value).then(() => {
+            alert("Copied: " + copyText.value);
+        });
+    }
+</script>
 </body>
 </html>
