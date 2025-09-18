@@ -57,6 +57,14 @@ services:
       - write-service
       - read-service
       - redirect-service
+  
+  ui:
+    build: ./ui
+    container_name: urlshortner-ui
+    ports:
+      - "8085:8085"
+    depends_on:
+      - api-gateway
 
 volumes:
   pgdata:
